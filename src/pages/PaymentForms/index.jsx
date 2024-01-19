@@ -119,7 +119,7 @@ const PaymentForms = () => {
               <br />
             </div>
             <Link
-                to='#'>
+                to='/Payment-forms'>
                 <button
                 className="btn btn-success btn-block btn-lg bg-green-500 text-white rounded-md"
                 onClick={processPayment}
