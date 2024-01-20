@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 // Tarjeta de credito o debito
 const PaymentForms = () => {
-  const [state, setState] = useState({
+  const [paymentInfo, setPaymentInfo] = useState({
     number: '',
     name: '',
     expiry: '',
@@ -13,18 +13,27 @@ const PaymentForms = () => {
     focus: '',
   });
 
+  // Analizar:
+  const [billingInfo, setBillingInfo] = useState({
+    name: paymentInfo.name, // Usa el nombre de la tarjeta (u otro nombre relevante)
+    description: "Arriendo mensual",
+    single_use: false,
+    collect_shipping: false,
+  });
+  
+
 // chekear el tipon de tarjeta 
   const handleInputChange = (e) => {
-    setState({
-      ...state,
+    setPaymentInfo({
+      ...paymentInfo,
       [e.target.name]: e.target.value,
     });
   };
 
 //   handleFocus
   const handleFocusChange = (e) => {
-    setState({
-      ...state,
+    setPaymentInfo({
+      ...paymentInfo,
       focus: e.target.name,
     });
   };
@@ -32,13 +41,13 @@ const PaymentForms = () => {
 //   Analizar los inputs
 
   const processPayment = () => {
-    console.log('number => ', state.number);
-    console.log('name => ', state.name);
-    console.log('expiry => ', state.expiry);
-    console.log('cvc => ', state.cvc);
-    console.log(JSON.stringify(state));
+    console.log('number => ', paymentInfo.number);
+    console.log('name => ', paymentInfo.name);
+    console.log('expiry => ', paymentInfo.expiry);
+    console.log('cvc => ', paymentInfo.cvc);
+    console.log('billingInfo => ', billingInfo);
   };
-
+  
 //   const wompi = useWompi()
 
 //   const {error, paymentMethod } = await wompi.createPaymentMethod({
@@ -46,21 +55,28 @@ const PaymentForms = () => {
 //     card: ElementInternals.getElements(cardElement)
 //   })
   
+const generateRandomName = () => {
+  const names = ['Name1', 'Name2', 'Name3']; // Replace with your actual names
+  const randomIndex = Math.floor(Math.random() * names.length);
+  return names[randomIndex];
+};
 
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="card bg-white rounded-md shadow-md p-4">
         <div className="card-body">
           <Cards
-            number={state.number}
-            name={state.name}
-            expiry={state.expiry}
-            cvc={state.cvc}
-            focused={state.focus}
+            number={paymentInfo.number}
+            name={paymentInfo.name}
+            expiry={paymentInfo.expiry}
+            cvc={paymentInfo.cvc}
+            focused={paymentInfo.focus}
           />
+          </div>
           <br />
           {/* onSubmit={handleSubmit} */}
-          <form >
+          {/* action='https://checkout.wompi.co/p/'   method='get'*/}
+          <form action='https://checkout.wompi.co/p/' method='get'>  
             {/* <CardElement/> */}
             <div className="form-group">
               <label htmlFor="number">Numero de la tarjeta</label>
@@ -123,13 +139,12 @@ const PaymentForms = () => {
                 <button
                 className="btn btn-success btn-block btn-lg bg-green-500 text-white rounded-md"
                 onClick={processPayment}
-                type="button"
+                type="submit"
                 >
                 Pagar
                 </button>
             </Link>
           </form>
-        </div>
       </div>
     </div>
   );
